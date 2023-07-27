@@ -178,7 +178,7 @@ func extractMainColor(imgURL string) (string, error) {
 
 func handleImageColor(w http.ResponseWriter, r *http.Request) {
 	// 从.env文件中获取referer配置
-	refererConfig := os.Getenv("ALLOWED_REFERER")
+	//refererConfig := os.Getenv("ALLOWED_REFERER")
 
 	// Set CORS headers to allow requests from all domains
     w.Header().Set("Access-Control-Allow-Origin", "*")
