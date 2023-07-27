@@ -14,8 +14,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
-
 	"github.com/chai2010/webp"
 	"github.com/go-redis/redis/v8" // 导入Redis客户端包
 	"github.com/joho/godotenv"
@@ -182,22 +180,10 @@ func handleImageColor(w http.ResponseWriter, r *http.Request) {
 	// 从.env文件中获取referer配置
 	refererConfig := os.Getenv("ALLOWED_REFERER")
 
-	// 检查请求的Referer是否在配置的白名单中
-	referer := r.Header.Get("Referer")
-	if refererConfig != "" && referer != "" {
-		allowedReferers := strings.Split(refererConfig, ",")
-		allowed := false
-		for _, allowedReferer := range allowedReferers {
-			if strings.TrimSpace(allowedReferer) == referer {
-				allowed = true
-				break
-			}
-		}
-		if !allowed {
-			http.Error(w, "禁止的跨域请求", http.StatusForbidden)
-			return
-		}
-	}
+	// Set CORS headers to allow requests from all domains
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+    w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
 
 	// 处理预检请求 (选项方法)
 	if r.Method == http.MethodOptions {
